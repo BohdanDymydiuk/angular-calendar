@@ -1,0 +1,33 @@
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.wrapper {
+  margin-top: 70px;
+  height: 100vh;
+}
+
+.calendar-header,
+.arrows {
+  @include flex-center;
+
+  justify-content: space-between;
+}
+
+.arrows {
+  gap: 10px;
+
+  button {
+    @include flex-center;
+
+    padding: 0;
+    border: none;
+    background-color: transparent;
+
+    path {
+      fill: white;
+    }
+  }
+}
+
