@@ -73,7 +73,7 @@
     <div class="calendar-dates">
       <!-- Blank spaces for days before the month starts on Friday -->
       <div class="grey" *ngFor="let day of prevMonthDays">{{day}}</div>
-      <div *ngFor="let day of currMonthDays">{{day}}</div>
+      <div *ngFor="let day of monthDays">{{day}}</div>
       <div class="grey" *ngFor="let day of nextMonthDays">{{day}}</div>
     </div>
   </div>
