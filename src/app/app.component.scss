@@ -3,31 +3,23 @@
   align-items: center;
 }
 
+$main-color: #007bff;
+$border-color: #ddd;
+
 .wrapper {
   margin-top: 70px;
   height: 100vh;
+
+  .calendar {
+    width: 450px;
+    border: 1px solid $border-color;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 }
 
-.calendar-header,
+.header,
 .arrows {
   @include flex-center;
 
   justify-content: space-between;
 }
-
-.arrows {
-  gap: 10px;
-
-  button {
-    @include flex-center;
-
-    padding: 0;
-    border: none;
-    background-color: transparent;
-
-    path {
-      fill: white;
-    }
-  }
-}
-

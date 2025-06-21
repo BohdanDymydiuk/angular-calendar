@@ -1,66 +1,63 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Calendar } from './types/calendar';
+import { MonthOffset } from './enums/month-offset';
+import { MonthEnds } from './enums/month-ends';
+import { HeaderComponent } from './components/header/header.component';
+import { WeekComponent } from './components/week/week.component';
+import { DaysComponent } from './components/days/days.component';
 
+// constants
 const week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const weekLastIndex = week.length - 1;
-
-enum MonthOffset {
-  prev = -1,
-  curr = 0,
-  next = 1,
-}
-
-enum MonthEnds {
-  first = 0,
-  last = 11,
-}
-
-interface Calendar {
-  [year: number]: {
-    [monthIndex: number]: {
-      name: string;
-      monthDays: number[];
-    }
-  }
-}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    HeaderComponent,
+    WeekComponent,
+    DaysComponent,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'angular-calendar';
   week = week;
   date = new Date();
 
+  // indexes
   monthIndex = this.date.getMonth();
   prevMonthIndex = this.getPrevMonthIndex();
   nextMonthIndex = this.getNextMonthIndex();
 
+  // year, month
   year = this.date.getFullYear();
   month = this.getMonth();
 
+  // month lenght and days
   monthLength = this.getMonthLength(MonthOffset.curr);
   monthDays = this.getMonthDays(this.monthLength);
-
   prevMonthLength = this.getMonthLength(MonthOffset.prev);
   prevMonthDays = this.getPrevDays(this.getMonthDays(this.prevMonthLength));
-
   nextMonthLength = this.getMonthLength(MonthOffset.next);
   nextMonthDays = this.getNextDays(this.getMonthDays(this.nextMonthLength));
 
+  // calendar
   calendar: Calendar = {
     [this.year]: {
       [this.monthIndex]: {
         name: this.month,
         monthDays: this.monthDays,
-      }
-    }
+      },
+    },
   };
+
+  // #region methods 1
 
   getMonth(year = this.year, monthIndex = this.monthIndex) {
     const date = new Date(year, monthIndex);
@@ -69,11 +66,15 @@ export class AppComponent {
   }
 
   getPrevMonthIndex() {
-    return (this.monthIndex + MonthOffset.prev) < MonthEnds.first ? MonthEnds.last : this.monthIndex + MonthOffset.prev;
+    return this.monthIndex + MonthOffset.prev < MonthEnds.first
+      ? MonthEnds.last
+      : this.monthIndex + MonthOffset.prev;
   }
 
   getNextMonthIndex() {
-    return (this.monthIndex + MonthOffset.next) > MonthEnds.last ? MonthEnds.first : this.monthIndex + MonthOffset.next;
+    return this.monthIndex + MonthOffset.next > MonthEnds.last
+      ? MonthEnds.first
+      : this.monthIndex + MonthOffset.next;
   }
 
   getMonthLength(monthOffset: MonthOffset) {
@@ -96,7 +97,6 @@ export class AppComponent {
       monthOffset === MonthOffset.next
     ) {
       console.log(this.month);
-
 
       this.setNextYear(nextYear);
     }
@@ -138,6 +138,9 @@ export class AppComponent {
     this.calendar[nextYear][MonthEnds.first] = { name, monthDays };
   }
 
+  // #endregion
+  // #region getters
+
   get firstWeekDay() {
     const { year, monthIndex } = this;
     const date = new Date(year, monthIndex, 1);
@@ -152,33 +155,40 @@ export class AppComponent {
     return date.getDay();
   }
 
+  // #endregion
+  // #region methods 2
+
   updateDate() {
     this.prevMonthIndex =
-      (this.monthIndex + MonthOffset.prev) < MonthEnds.first ?
-        MonthEnds.last :
-        this.monthIndex + MonthOffset.prev;
+      this.monthIndex + MonthOffset.prev < MonthEnds.first
+        ? MonthEnds.last
+        : this.monthIndex + MonthOffset.prev;
 
     this.nextMonthIndex =
-      (this.monthIndex + MonthOffset.next) > MonthEnds.last ?
-        MonthEnds.first :
-        this.monthIndex + MonthOffset.next;
+      this.monthIndex + MonthOffset.next > MonthEnds.last
+        ? MonthEnds.first
+        : this.monthIndex + MonthOffset.next;
 
     this.monthLength = this.getMonthLength(MonthOffset.curr);
     this.monthDays = this.getMonthDays(this.monthLength);
 
     this.prevMonthLength = this.getMonthLength(MonthOffset.prev);
-    this.prevMonthDays = this.getPrevDays(this.getMonthDays(this.prevMonthLength));
+    this.prevMonthDays = this.getPrevDays(
+      this.getMonthDays(this.prevMonthLength)
+    );
 
     this.nextMonthLength = this.getMonthLength(MonthOffset.next);
-    this.nextMonthDays = this.getNextDays(this.getMonthDays(this.nextMonthLength));
+    this.nextMonthDays = this.getNextDays(
+      this.getMonthDays(this.nextMonthLength)
+    );
   }
 
   prevMonthHandler() {
-    const { monthIndex, prevMonthIndex, prevMonthLength, calendar, year } = this;
+    const { monthIndex, prevMonthIndex, prevMonthLength, calendar, year } =
+      this;
     const prevYear = year - 1;
 
     this.monthIndex = prevMonthIndex;
-
 
     if (monthIndex === MonthEnds.first) {
       this.year = prevYear;
@@ -195,15 +205,15 @@ export class AppComponent {
       this.month = calendar[year][prevMonthIndex].name;
     }
 
-    this.updateDate()
+    this.updateDate();
   }
 
   nextMonthHandler() {
-    const { monthIndex, nextMonthIndex, nextMonthLength, calendar, year } = this;
+    const { monthIndex, nextMonthIndex, nextMonthLength, calendar, year } =
+      this;
     const nextYear = year + 1;
 
     this.monthIndex = nextMonthIndex;
-
 
     if (monthIndex === MonthEnds.last) {
       this.year = nextYear;
@@ -220,6 +230,8 @@ export class AppComponent {
       this.month = calendar[year][nextMonthIndex].name;
     }
 
-    this.updateDate()
+    this.updateDate();
   }
+
+  // #endregion
 }

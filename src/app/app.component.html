@@ -1,80 +1,21 @@
-<style>
-  /* Calendar container */
-  .calendar {
-    width: 450px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Calendar header styling */
-  .calendar-header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 17px;
-    font-size: 1.2em;
-    font-weight: bold;
-  }
-
-  /* Days of the week styling */
-  .calendar-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background-color: #007bff;
-    color: white;
-  }
-
-  .calendar-days div {
-    padding: 10px;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  /* Date cells styling */
-  .calendar-dates {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  }
-
-  .calendar-dates div {
-    display: flex;
-    align-items: center;
-    height: 60px;
-    justify-content: center;
-    border: 1px solid #ddd;
-  }
-
-  .grey {
-    color: rgb(196, 196, 196);
-  }
-</style>
-
 <div class="wrapper">
   <div class="calendar">
-    <!-- Month and Year Header -->
-    <div class="calendar-header">
-      <span>{{month}} {{year}} </span>
+    <!-- header -->
+    <app-header
+      [month]="month"
+      [year]="year"
+      [prevMonthHandler]="prevMonthHandler.bind(this)"
+      [nextMonthHandler]="nextMonthHandler.bind(this)"
+    ></app-header>
 
-      <div class="arrows">
-        <button class="up" (click)="prevMonthHandler()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="m3.293 11.293 1.414 1.414L11 6.414V20h2V6.414l6.293 6.293 1.414-1.414L12 2.586l-8.707 8.707z"/></svg>
-        </button>
-        <button class="down" (click)="nextMonthHandler()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M13 17.586V4h-2v13.586l-6.293-6.293-1.414 1.414L12 21.414l8.707-8.707-1.414-1.414L13 17.586z"/></svg>
-        </button>
-      </div>
-    </div>
+    <!-- week -->
+    <app-week [week]="week"></app-week>
 
-    <!-- Days of the Week -->
-    <div class="calendar-days">
-      <div *ngFor="let day of week">{{day}}</div>
-    </div>
-
-    <!-- Calendar Dates -->
-    <div class="calendar-dates">
-      <!-- Blank spaces for days before the month starts on Friday -->
-      <div class="grey" *ngFor="let day of prevMonthDays">{{day}}</div>
-      <div *ngFor="let day of monthDays">{{day}}</div>
-      <div class="grey" *ngFor="let day of nextMonthDays">{{day}}</div>
-    </div>
+    <!-- days -->
+    <app-days
+      [prevMonthDays]="prevMonthDays"
+      [monthDays]="monthDays"
+      [nextMonthDays]="nextMonthDays"
+    ></app-days>
   </div>
 </div>

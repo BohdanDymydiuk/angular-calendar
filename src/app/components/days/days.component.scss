@@ -1,0 +1,18 @@
+@import "../../app.component.scss";
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+
+  div {
+    @include flex-center;
+
+    height: 60px;
+    justify-content: center;
+    border: 1px solid $border-color;
+  }
+
+  .gray {
+    color: rgb(196, 196, 196);
+  }
+}

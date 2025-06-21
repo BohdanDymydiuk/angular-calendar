@@ -1,0 +1,25 @@
+@import "../../app.component.scss";
+
+.header {
+  background-color: $main-color;
+  color: white;
+  padding: 10px 17px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.arrows {
+  gap: 10px;
+
+  button {
+    @include flex-center;
+
+    padding: 0;
+    border: none;
+    background-color: transparent;
+
+    path {
+      fill: white;
+    }
+  }
+}
